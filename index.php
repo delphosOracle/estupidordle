@@ -42,10 +42,10 @@
         <div class="container">            
             <div class="row"></div>
 
-            <div class="row">
-                <div class="col col-md-4"></div>
+            <div class="row" style="padding-bottom: 95px;">
+                <div class="col col-md-4 col-sm-1 col-xs-1"></div>
 
-                <div class="col col-md-4">
+                <div class="col col-md-4 col-sm-10 col-xs-10">
 
                     <div class="intento">
                         <div class="ayudas">
@@ -125,9 +125,10 @@
 
                 </div>  
 
-                <div class="col col-md-4"></div>
+                <div class="col col-md-4 col-sm-1 col-xs-1"></div>
             </div>
 
+            <div class="row"></div>
             
         </div>
 
@@ -165,7 +166,7 @@
             loadGame();
             loadBoard();
             $.ajax({
-                url:"http://localhost/estupidordleBeta/api/capitulo.php",
+                url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
                 method:"GET",
                 data:{},
                 dataType:"JSON",
@@ -180,14 +181,14 @@
                     $('#game-options').select2();           
                 },
                 error:function(data){
-                    alert(data);
+                    console.log(data);
                 }
             });
 
             $('#validar').click(function() {
                 var capSel       = $('#game-options').val();
                 $.ajax({
-                    url:"http://localhost/estupidordleBeta/api/capitulo.php",
+                    url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
                     method:"POST",
                     data:JSON.stringify({"cap":capSel}),
                     dataType:"JSON",
@@ -245,13 +246,16 @@
             if(localStorage.getItem("stupidordle")){
                 console.log("dataExistente");
             } else{
+                let fechaActual = new Date();
+                fechaActual.setHours(0,0,0,0);
                 let probados = ["","","","","",""];
                 let gameInfo = {
                     conoceReglas: "false",
                     intentos: 0,
                     victorias: 0,
                     jugados: 0,
-                    test: probados
+                    test: probados,
+                    ultimajugada: fechaActual
                 };
 
                 localStorage.setItem("stupidordle", JSON.stringify(gameInfo));
@@ -262,19 +266,30 @@
             let dataGame = JSON.parse(localStorage.getItem("stupidordle"));
             let jugadas = dataGame.test; 
             let size = dataGame.intentos;
-            for(let i = 0; i < size; i++)          {
-                if(jugadas[i] !== ""){
-                    let txt = getTxtIntento(i+1);
-                    $(txt).val(jugadas[i]);
-                    validarPasadas(jugadas[i], i+1);
-                }
-            }                    
+            let fechaActual = new Date();
+            fechaActual.setHours(0,0,0,0);
+
+            if(fechaActual > dataGame.ultimajugada){
+                let probados = ["","","","","",""];
+                dataGame.intentos = 0;
+                dataGame.test = probados;
+                dataGame.ultimajugada = fechaActual;
+                localStorage.setItem("stupidordle", JSON.stringify(dataGame));
+            } else {
+                for(let i = 0; i < size; i++)          {
+                    if(jugadas[i] !== ""){
+                        let txt = getTxtIntento(i+1);
+                        $(txt).val(jugadas[i]);
+                        validarPasadas(jugadas[i], i+1);
+                    }
+                }                    
+            }            
         }
 
         function validarPasadas(valor, intento){
             var capSel       = valor;
             $.ajax({
-                url:"http://localhost/estupidordleBeta/api/capitulo.php",
+                url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
                 method:"POST",
                 data:JSON.stringify({"cap":capSel}),
                 dataType:"JSON",
@@ -388,6 +403,14 @@
         function getVictorias(){
             let dataGame = JSON.parse(localStorage.getItem("stupidordle"));
             return dataGame.victorias;
+        }
+
+        function getCurrentDate() {
+            const t = new Date();
+            const date = ('0' + t.getDate()).slice(-2);
+            const month = ('0' + (t.getMonth() + 1)).slice(-2);
+            const year = t.getFullYear();
+            return `${date}/${month}/${year}`;
         }
             
     </script>

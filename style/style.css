@@ -1,5 +1,6 @@
 body {
     background-color: #1F1F1F !important;
+    overflow-y: scroll !important;
     /*color: #F1F1F1;*/     
 }
 
@@ -55,7 +56,9 @@ h1 {
 }
 
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
-  }
+    height: 56px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
