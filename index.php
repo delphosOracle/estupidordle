@@ -222,7 +222,7 @@
             $('#reglas').modal('show');
 
             $.ajax({
-                url:"/estupidordleBeta/api/capitulo.php",
+                url:"/estupidordle/api/capitulo.php",
                 method:"GET",
                 data:{},
                 dataType:"JSON",
@@ -249,7 +249,7 @@
             $('#validar').click(function() {
                 var capSel       = $('#game-options').val();
                 $.ajax({
-                    url:"/estupidordleBeta/api/capitulo.php",
+                    url:"/estupidordle/api/capitulo.php",
                     method:"POST",
                     data:JSON.stringify({"cap":capSel}),
                     dataType:"JSON",
@@ -368,7 +368,7 @@
         function validarPasadas(valor, intento){
             var capSel       = valor;
             $.ajax({
-                url:"/estupidordleBeta/api/capitulo.php",
+                url:"/estupidordle/api/capitulo.php",
                 method:"POST",
                 data:JSON.stringify({"cap":capSel}),
                 dataType:"JSON",
@@ -516,7 +516,7 @@
         
         function getCapituloDia() {
             $.ajax({
-                url:"/estupidordleBeta/api/capitulo.php",
+                url:"/estupidordle/api/capitulo.php",
                 method:"GET",
                 data:{id: "x"},
                 dataType:"JSON",
