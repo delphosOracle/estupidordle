@@ -46,6 +46,28 @@
             return $resp;
         }
 
+        public function getCapituloDia(){
+            $mysqli = $this->conect();
+            date_default_timezone_set('America/Bogota');
+            $todaysDate = date("Y-m-d");
+            $consulta = sprintf("SELECT * FROM tl_capitulos WHERE cap_fecha_jugado='%s'", $mysqli->real_escape_string($todaysDate));
+
+            $resultado = $mysqli->query($consulta);
+
+            if (!$resultado) {
+                return "no se ha obtenido información";
+            }
+
+            $resp = array();
+
+            while ($fila = $resultado->fetch_assoc()) {
+                $valor = array($fila['cap_data_inf'], $fila['cap_titulo'], $fila['cap_programa'], $fila['cap_temporada'], $fila['cap_tema'], $fila['cap_participantes']);
+                array_push($resp, $valor);
+            }      
+            
+            return $resp; 
+        }
+
         public function validaCapitulo($cap){
             $mysqli = $this->conect();
             date_default_timezone_set('America/Bogota');

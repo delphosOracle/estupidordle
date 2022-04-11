@@ -8,7 +8,7 @@
 
         if(isset($_GET['id'])){
             $capitulo = new CapituloClass();
-            $resp["msg"] = $capitulo->selectCapitulo();
+            $resp["msg"] = $capitulo->getCapituloDia();
             echo json_encode($resp);
         } else {
             $capitulo = new CapituloClass();
