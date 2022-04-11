@@ -49,6 +49,10 @@
                 <div class="col col-md-4 col-sm-10 col-xs-10">
 
                     <div class="intento">
+                        <button type="button" id="highlights" class="btn btn-warning btn-block">Ver highlights <i class="bi bi-journal-bookmark-fill"></i></button>
+                    </div>
+
+                    <div class="intento">
                         <div class="ayudas">
                             <table style="width: 100%; padding">
                                 <tr class="table-primary text-center" id="intento1">
@@ -194,7 +198,7 @@
                     </div>
                     <div class="modal-body">
                         <H3>Reglas e información importante</H3>
-                        <p>Aquí tiene un juego en fase beta donde adivinaras el capitulo diario de los podcasts asociados a Estúpido Nerd, para ello, tendrás 6 intentos, donde por cada intento se validarán diferentes propiedades del capítulo, estás propiedades son: <br>
+                        <p>Aquí tienes un juego en fase beta donde adivinaras el capitulo diario de los podcasts asociados a Estúpido Nerd, para ello, tendrás 6 intentos, donde por cada intento se validarán diferentes propiedades del capítulo, estás propiedades son: <br>
                             <b>Programa:</b> Estúpido Nerd – Nivel Cero – Hoy el tema es… <br>
                             <b>Temporada:</b> 1, 2, 3, 4… <br>
                             <b>Tema:</b> Series, Películas, Videojuegos, Otras cosas ñoñas y anime. <br>
@@ -244,6 +248,10 @@
 
             $('#btn-reglas').click(function() {
                 $('#reglas').modal('hide');
+            });
+
+            $('#highlights').click(function() {
+                $('#reglas').modal('show');
             });
 
 
