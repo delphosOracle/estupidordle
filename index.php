@@ -134,8 +134,8 @@
 
         <footer class="bg-light text-center text-lg-start">        
             <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-                by: <a class="text-dark" href="http://twitter.com/alexanderch95">delphos</a>
-                con amorsh para <a class="text-dark" href="http://twitter.com/estupido_nerd">Estúpido Nerd</a>
+                by: <a class="text-dark" href="http://twitter.com/alexanderch95" target="_blank">delphos</a>
+                con amorsh para <a class="text-dark" href="http://twitter.com/estupido_nerd" target="_blank">Estúpido Nerd</a>
             
             </div>
         </footer>
@@ -154,7 +154,60 @@
                         <div id="dataJugadas">
                             <h5 class="text-center"><b>Jugadas:</b> <span id="jugadas"></span> </h5>
                             <h5 class="text-center"><b>Victorias:</b> <span id="victorias"></span> </h5>
+                            <p class="text-center" id="capDia"></p>                            
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="lose" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">😓😓😓 Auch, has fallado... 😓😓😓</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <H3>😓😓😓 Auch, has fallado, pero vuelve mañana a seguir intentando... 😓😓😓</H3>
+                        <div id="dataJugadas">
+                            <h5 class="text-center"><b>Jugadas:</b> <span id="jugadasLose"></span> </h5>
+                            <h5 class="text-center"><b>Victorias:</b> <span id="victoriasLose"></span> </h5>
+                            <p class="text-center" id="capDiaLose"></p>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="reglas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Info importante.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <H3>Reglas e información importante</H3>
+                        <p>Aquí tiene un juego en fase beta donde adivinaras el capitulo diario de los podcasts asociados a Estúpido Nerd, para ello, tendrás 6 intentos, donde por cada intento se validarán diferentes propiedades del capítulo, estás propiedades son: <br>
+                            <b>Programa:</b> Estúpido Nerd – Nivel Cero – Hoy el tema es… <br>
+                            <b>Temporada:</b> 1, 2, 3, 4… <br>
+                            <b>Tema:</b> Series, Películas, Videojuegos, Otras cosas ñoñas y anime. <br>
+                            <b>Participantes del podcast:</b> Juandapo, Diego y Boris – Juandapo y Diego, – Juandapo y Boris – Diego y Boris – Solo Diego – Solo Boris – Juandapo, Diego, Boris y/o invitados (pueden o no estar los nerds). <br>
+
+                            Es importante recalcar que solo hay capítulos canon de los podcasts, lo que significa que no hay capítulos de DLC, extras, cuarentena nerd o estúpido vs nerd. <br>
+                            
+                            NOTA: para los episodios de Nivel Cero y HETE, al no tener temporadas, se dividieron en paquetes de 10 donde cada 10 capítulos es una temporada, por ejemplo, el capítulo 2 de HETE (El fallecimiento de la Reina Isabel), corresponde a la temporada 1 y el capitulo 44 (El impuesto a las ventanas) pertenece a la temporada 5, de igual manera para nivel cero.<br>
+
+                            Diviértete y recuerda es beta, así que puede haber fallos. 🙈
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-reglas" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -165,8 +218,11 @@
         $(document).ready(function(){
             loadGame();
             loadBoard();
+
+            $('#reglas').modal('show');
+
             $.ajax({
-                url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
+                url:"/estupidordleBeta/api/capitulo.php",
                 method:"GET",
                 data:{},
                 dataType:"JSON",
@@ -185,10 +241,15 @@
                 }
             });
 
+            $('#btn-reglas').click(function() {
+                $('#reglas').modal('hide');
+            });
+
+
             $('#validar').click(function() {
                 var capSel       = $('#game-options').val();
                 $.ajax({
-                    url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
+                    url:"/estupidordleBeta/api/capitulo.php",
                     method:"POST",
                     data:JSON.stringify({"cap":capSel}),
                     dataType:"JSON",
@@ -197,13 +258,14 @@
                         var info = data.msg;
                         var html = "";
                         var opOK = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
-                        var opFail = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";
-                        console.log(data);                        
+                        var opFail = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";                       
 
                         if(info[0] === 'OK'){
                             getUpdateWin();
+                            $('#validar').prop('disabled', true);
                             $('#jugadas').html(getJugadas());
                             $('#victorias').html(getVictorias());
+                            getCapituloDia();
                             $('#win').modal('show');
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
@@ -223,12 +285,20 @@
                         }
 
                         let intento = getTry();
+
+                        if(intento >= 6) {
+                            $('#validar').prop('disabled', true);
+                            getUpdateLose();
+                            $('#jugadasLose').html(getJugadas());
+                            $('#victoriasLose').html(getVictorias());
+                            getCapituloDia();
+                            $('#lose').modal('show');
+                        } 
                         let txt = getTxtIntento(intento);
                         let tbl = getIntento(intento);
 
                         $(tbl).html(html);
-                        $(txt).val(capSel);
-                                                
+                        $(txt).val(capSel);             
                     },
                     error:function(data){
                         console.log(data);
@@ -269,7 +339,16 @@
             let fechaActual = new Date();
             fechaActual.setHours(0,0,0,0);
 
-            if(fechaActual > dataGame.ultimajugada){
+            if(dataGame.intentos >= 6){
+                $('#validar').prop('disabled', true);
+            }
+
+            let ultimaJugada = new Date(dataGame.ultimajugada);
+            ultimaJugada.setHours(0,0,0,0);
+            console.log(ultimaJugada);
+            console.log(fechaActual);
+
+            if(fechaActual > ultimaJugada){
                 let probados = ["","","","","",""];
                 dataGame.intentos = 0;
                 dataGame.test = probados;
@@ -289,7 +368,7 @@
         function validarPasadas(valor, intento){
             var capSel       = valor;
             $.ajax({
-                url:"http://192.168.20.20/estupidordleBeta/api/capitulo.php",
+                url:"/estupidordleBeta/api/capitulo.php",
                 method:"POST",
                 data:JSON.stringify({"cap":capSel}),
                 dataType:"JSON",
@@ -304,6 +383,8 @@
                     if(info[0] === 'OK'){
                             $('#jugadas').html(getJugadas());
                             $('#victorias').html(getVictorias());
+                            getCapituloDia();
+                            $('#validar').prop('disabled', true);
                             $('#win').modal('show');
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
@@ -324,7 +405,18 @@
 
                     var tabla = getIntento(intento);
 
-                    $(tabla).html(html);
+                    if(intento >= 6) {
+                        $('#jugadasLose').html(getJugadas());
+                        $('#victoriasLose').html(getVictorias());
+                        getCapituloDia();
+                        $('#lose').modal('show');
+                    } 
+
+                    let txt = getTxtIntento(intento);
+                    let tbl = getIntento(intento);
+
+                    $(tbl).html(html);
+                    $(txt).val(capSel);
                                             
                 },
                 error:function(data){
@@ -394,6 +486,15 @@
 
             localStorage.setItem("stupidordle", JSON.stringify(dataGame));
         }
+
+        function getUpdateLose() {
+            let dataGame = JSON.parse(localStorage.getItem("stupidordle"));  
+            let jugadas = dataGame.jugados;
+
+            dataGame.jugados = jugadas + 1;
+
+            localStorage.setItem("stupidordle", JSON.stringify(dataGame));
+        }
         
         function getJugadas(){
             let dataGame = JSON.parse(localStorage.getItem("stupidordle"));
@@ -412,6 +513,27 @@
             const year = t.getFullYear();
             return `${date}/${month}/${year}`;
         }
-            
+        
+        function getCapituloDia() {
+            $.ajax({
+                url:"/estupidordleBeta/api/capitulo.php",
+                method:"GET",
+                data:{id: "x"},
+                dataType:"JSON",
+                success:function(data){
+                    var info = data.msg;
+                    var html = "";
+                    
+                    var capDelDia = info[0][0] + " - " + info[0][1];
+
+                    $('#capDia').html(capDelDia);
+                    $('#capDiaLose').html(capDelDia);
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        }
+
     </script>
 </html>
