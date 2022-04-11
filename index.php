@@ -258,9 +258,10 @@
                         updateTryGame(capSel);
                         var info = data.msg;
                         var html = "";
-                        var opOK = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
-                        var opFail = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";                       
-
+                        var opOK = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
+                        var opFail = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";                       
+                        var opWin = "<td class='table-primary' style='width: 20%' id='ayuda1'>🎉</td>";
+                        var opLose = "<td class='table-primary' style='width: 20%' id='ayuda1'>😭</td>";
                         if(info[0] === 'OK'){
                             getUpdateWin();
                             $('#validar').prop('disabled', true);
@@ -275,6 +276,7 @@
                                     html += opFail;
                                 }
                             }
+                            html += opWin;
                         } else {
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
@@ -283,6 +285,7 @@
                                     html += opFail;
                                 }
                             }
+                            html += opLose;
                         }
 
                         let intento = getTry();
@@ -377,8 +380,10 @@
 
                     var info = data.msg;
                     var html = "";
-                    var opOK = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
-                    var opFail = "<td class='table-primary' style='width: 25%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";
+                    var opOK = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
+                    var opFail = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";
+                    var opWin = "<td class='table-primary' style='width: 20%' id='ayuda1'>🎉</td>";
+                    var opLose = "<td class='table-primary' style='width: 20%' id='ayuda1'>😭</td>";
                     console.log(data);                        
 
                     if(info[0] === 'OK'){
@@ -394,6 +399,7 @@
                                     html += opFail;
                                 }
                             }
+                            html += opWin;
                         } else {
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
@@ -402,6 +408,7 @@
                                     html += opFail;
                                 }
                             }
+                            html += opLose;
                         }
 
                     var tabla = getIntento(intento);
