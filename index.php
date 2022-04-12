@@ -44,12 +44,25 @@
             <div class="row"></div>
 
             <div class="row" style="padding-bottom: 95px;">
-                <div class="col col-md-4 col-sm-1 col-xs-1"></div>
+                <div class="col col-md-2 col-sm-1 col-xs-1"></div>
 
-                <div class="col col-md-4 col-sm-10 col-xs-10">
-
+                <div class="col col-md-8 col-sm-10 col-xs-10">
                     <div class="intento">
                         <button type="button" id="highlights" class="btn btn-warning btn-block">Ver highlights <i class="bi bi-journal-bookmark-fill"></i></button>
+                    </div>
+
+                    <div class="intento">
+                        <div class="ayudas">
+                            <table style="width: 100%; padding">
+                                <tr class="table-primary text-center" id="intento0">
+                                    <td class='table-primary' style='width: 20%; color: #FFF; font-size: 12px;'>Programa</td>
+                                    <td class='table-primary' style='width: 20%; color: #FFF; font-size: 12px;'>Temporada</td>
+                                    <td class='table-primary' style='width: 20%; color: #FFF; font-size: 12px;'>Tema</td>
+                                    <td class='table-primary' style='width: 20%; color: #FFF; font-size: 12px;'>Participantes</td>
+                                    <td class='table-primary' style='width: 20%; color: #FFF; font-size: 12px;'>¿Acertaste?</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="intento">
@@ -130,7 +143,7 @@
 
                 </div>  
 
-                <div class="col col-md-4 col-sm-1 col-xs-1"></div>
+                <div class="col col-md-2 col-sm-1 col-xs-1"></div>
             </div>
 
             <div class="row"></div>
@@ -150,7 +163,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">🎉🎉🎉 Lo has conseguido 🎉🎉🎉</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal('win');">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -171,7 +184,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">😓😓😓 Auch, has fallado... 😓😓😓</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal('lose');">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -192,7 +205,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Info importante.</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal('reglas');">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -220,6 +233,13 @@
     </body>
 
     <script>
+        var opOK   = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
+        var opFail = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";
+        var opUp   = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-chevron-double-up' style='color: #f1d709; font-size: 25px;'></i></td>";
+        var opDown = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-chevron-double-down' style='color: #f1d709; font-size: 25px;'></i></td>";
+        var opWin  = "<td class='table-primary' style='width: 20%' id='ayuda1'>🎉</td>";
+        var opLose = "<td class='table-primary' style='width: 20%' id='ayuda1'>😭</td>";
+
         $(document).ready(function(){
             loadGame();
             loadBoard();
@@ -250,7 +270,7 @@
                 $('#reglas').modal('hide');
             });
 
-            $('#highlights').click(function() {
+             $('#highlights').click(function() {
                 $('#reglas').modal('show');
             });
 
@@ -266,10 +286,6 @@
                         updateTryGame(capSel);
                         var info = data.msg;
                         var html = "";
-                        var opOK = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
-                        var opFail = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";                       
-                        var opWin = "<td class='table-primary' style='width: 20%' id='ayuda1'>🎉</td>";
-                        var opLose = "<td class='table-primary' style='width: 20%' id='ayuda1'>😭</td>";
                         if(info[0] === 'OK'){
                             getUpdateWin();
                             $('#validar').prop('disabled', true);
@@ -289,8 +305,12 @@
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
                                     html += opOK;
-                                } else {
+                                } else if(info[i] === 'NO'){
                                     html += opFail;
+                                } else if(info[i] === '>'){
+                                    html += opUp;
+                                } else if(info[i] === '<'){
+                                    html += opDown;
                                 }
                             }
                             html += opLose;
@@ -388,10 +408,6 @@
 
                     var info = data.msg;
                     var html = "";
-                    var opOK = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-check-fill' style='color: green; font-size: 25px;'></i></td>";
-                    var opFail = "<td class='table-primary' style='width: 20%' id='ayuda1'><i class='bi bi-bookmark-x-fill' style='color: red; font-size: 25px;'></i></td>";
-                    var opWin = "<td class='table-primary' style='width: 20%' id='ayuda1'>🎉</td>";
-                    var opLose = "<td class='table-primary' style='width: 20%' id='ayuda1'>😭</td>";
                     console.log(data);                        
 
                     if(info[0] === 'OK'){
@@ -412,8 +428,12 @@
                             for(let i = 1; i < info.length; i++){
                                 if(info[i] === 'OK'){
                                     html += opOK;
-                                } else {
+                                } else if(info[i] === 'NO'){
                                     html += opFail;
+                                } else if(info[i] === '>'){
+                                    html += opUp;
+                                } else if(info[i] === '<'){
+                                    html += opDown;
                                 }
                             }
                             html += opLose;
@@ -551,5 +571,9 @@
             });
         }
 
+        function cerrarModal(id) {
+            let idModal = '#'+id;
+            $(idModal).modal('hide');
+        }
     </script>
 </html>
