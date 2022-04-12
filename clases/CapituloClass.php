@@ -118,10 +118,12 @@
                 array_push($validate, "NO");
             }
 
-            if($resp[0][3] === $resp2[0][3]){
+            if($resp[0][3] > $resp2[0][3]){
+                array_push($validate, ">");
+            } else if($resp[0][3] < $resp2[0][3]){
+                array_push($validate, "<");
+            } else if($resp[0][3] == $resp2[0][3]){
                 array_push($validate, "OK");
-            } else {
-                array_push($validate, "NO");
             }
 
             if($resp[0][4] === $resp2[0][4]){
